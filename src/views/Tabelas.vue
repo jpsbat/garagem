@@ -1,96 +1,38 @@
 <template>
   <main class="conteudo-principal">
-      <section>
+    <section>
+        <span class="subtitulo-lg cadastre">
+            Cadastre o carro:
+        </span>
+        <div>
           <span class="subtitulo-lg cadastre">
-              Cadastre o veículo:
+            Clientes registrados:
           </span>
-          <div class="componente-form-table">
-        <form action="">
-          <label for="" class="itens">Marca e modelo: </label>
-          <input
-            autocomplete="off" required
-            type="text"
-            id=""
-            name=""
-            v-model="modelo"
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Marca e modelo</th>
+                <th>Placa</th>
+                <th>Data de revisão</th>
+                <th>Proprietário</th>
+              </tr>
+            </thead>
+          <tbody>
+            <tr
+              v-for="carro in carros"
+              :key="carro.id"
             >
-          <br><br>
-          <label for="">Placa: </label>
-          <input
-            type="text"
-            id=""
-            name=""
-            v-model="placa"
-            >
-            <br><br>
-          <label for="">Data de revisão: (Formato dd/mm/aaaa)</label>
-          <input
-            type="text"
-            id=""
-            name=""
-            v-model="revisao"
-            >
-            <br><br>
-          <label for="">Proprietário: </label>
-          <select
-            name=""
-            id=""
-            v-model="cliente"
-            >
-              <option value="">--Escolha uma opção--</option>
-              <option
-                v-for="cliente in clientes_disponiveis"
-                :key="cliente.ID"
-                :value="cliente.ID"
-              >
-                {{ cliente.NOME }}
-              </option>
-            </select>
-            <b-button
-              class="cadastrar"
-              type="submit"
-              value="Cadastrar"
-              @click="cadastrarCarro($event)"
-            >Cadastrar</b-button>
-        </form>
-    </div>
-    <div>
-      <span class="subtitulo-lg cadastre">
-        Alterar/excluir carros
-      </span>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Marca e modelo</th>
-            <th>Placa</th>
-            <th>Data de revisão</th>
-            <th>Proprietário</th>
-            <th>Alterar</th>
-            <th>Excluir</th>
-          </tr>
-        </thead>
-    <tbody>
-      <tr
-        v-for="carro in carros"
-        :key="carro.id"
-      >
-        <td>{{ carro.id }}</td>
-        <td>{{ carro.modelo }}</td>
-        <td>{{ carro.placa }}</td>
-        <td>{{ carro.revisao }}</td>
-        <td>{{ carro.nome }}</td>
-        <td>
-          <b-button class="botao" @click="atualizarCarro(carro.id)">Alterar</b-button>
-        </td>
-        <td>
-          <b-button class="botao" @click="excluirCarro(carro.id)">Excluir</b-button>
-        </td>
-      </tr>
-    </tbody>
-    </table>
-    </div>
-  </section>
+              <td>{{ carro.id }}</td>
+              <td>{{ carro.modelo }}</td>
+              <td>{{ carro.placa }}</td>
+              <td>{{ carro.revisao }}</td>
+              <td>{{ carro.nome }}</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+    </section>
   </main>
 </template>
 
@@ -104,7 +46,7 @@ export default {
       modelo: '',
       placa: '',
       revisao: '',
-      cliente: '',
+      nome: '',
       clientes_disponiveis: [],
       carros: []
     }
@@ -122,12 +64,11 @@ export default {
           modelo: this.modelo,
           placa: this.placa,
           revisao: this.revisao,
-          id_cliente: this.cliente
+          id_cliente: this.nome
         })
         .then(response => {
           console.log(response)
           this.listar()
-          alert('Veículo cadastrado com sucesso!')
         })
         .catch(error => console.log(error))
     },
@@ -223,7 +164,7 @@ color: #04a5c4;
 display: block;
 text-align: center;
 margin-bottom: 1.5rem;
-margin-top: 5rem;
+margin-top: 1.5rem;
 }
 @media only screen and (max-width: 1300px) {
 .conteudo-principal {
@@ -274,9 +215,10 @@ table {
   margin-bottom: 20px;
 }
 th, td {
-  padding: 8px;
+  padding: 20px;
   text-align: center;
 }
+
 th {
   background-color: #333;
   color: #fff;

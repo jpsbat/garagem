@@ -24,7 +24,7 @@
   </div>
 
   <span class="subtitulo-lg cadastre">
-    Clientes cadastrados:
+    Alterar/excluir clientes
   </span>
   <div>
     <table>
@@ -82,6 +82,7 @@ export default {
         .then(response => {
           console.log(response)
           this.listar()
+          alert('Cliente cadastrado com sucesso!')
         })
         .catch(error => console.log(error))
     },
@@ -150,7 +151,7 @@ color: #04a5c4;
 display: block;
 text-align: center;
 margin-bottom: 1.5rem;
-margin-top: 1.5rem;
+margin-top: 5rem;
 }
 input, select {
 margin-left: .5rem;
@@ -187,11 +188,11 @@ table {
   background-color: #f5f5f5;
   width: 100%;
   margin-bottom: 20px;
+  padding: 10px;
 }
 th, td {
   padding: 8px;
   text-align: center;
-  padding-inline-start: 35px;
 }
 
 th {

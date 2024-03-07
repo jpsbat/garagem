@@ -15,9 +15,10 @@
           <div class="divider-menu"></div>
           <nav class="mb-3">
             <b-nav vertical>
-              <b-nav-item :to="{ path: '/' }" @click="hide"><b-icon icon="house-fill"></b-icon> Home</b-nav-item>
-              <b-nav-item :to="{ path: '/clientes' }" @click="hide"><b-icon icon="people-fill"></b-icon> Clientes</b-nav-item>
-              <b-nav-item :to="{ path: '/carros' }" @click="hide"><b-icon icon="cart-fill"></b-icon> Carros</b-nav-item>
+              <b-nav-item :to="{ path: '/' }" @click="hide"><b-icon icon="house"></b-icon>‎ ‎ Página inicial</b-nav-item>
+              <b-nav-item :to="{ path: '/clientes' }" @click="hide"><b-icon icon="people"></b-icon>‎ ‎ Gerenciar clientes</b-nav-item>
+              <b-nav-item :to="{ path: '/carros' }" @click="hide"><b-icon icon="truck"></b-icon>‎ ‎ Gerenciar veículos</b-nav-item>
+              <b-nav-item :to="{ path: '/tabelas' }" @click="hide"><b-icon icon="ui-radios"></b-icon>‎ ‎ Visualizar cadastros</b-nav-item>
             </b-nav>
           </nav>
         </div>
