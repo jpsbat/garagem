@@ -1,0 +1,36 @@
+@import url('https://fonts.cdnfonts.com/css/bebas-neue');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+:root {
+    --font-family-padrao: Nunito Sans, sans-serif;
+    --cabecalhos: Paytone One, sans-serif;
+    --titulo: Bebas Neue, sans-serif;
+    --corpo-de-texto: Open Sans, sans-serif;
+  }
+  
+  .cabecalho-lg {
+    font-family: var(--titulo);
+    font-size: 4.35625em;
+    line-height: 120%;
+    font-weight: bold;
+  }
+
+  .corpo {
+    font-family: var(--corpo-de-texto);
+    font-size: 2.7852em;
+    line-height: 120%;
+  }
+  
+  .subtitulo-lg {
+    font-size: 2.1296em;
+    line-height: 150%;
+    font-weight: bold;
+    color: #eeeeee;
+    font-family: var(--titulo)
+  }
+  
+  @media only screen and (max-width: 767px) {
+    .cabecalho-lg {
+      font-size: 2.75em;
+    }
+  }
