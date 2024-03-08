@@ -215,6 +215,7 @@ input, select {
   text-align: center;
   font-size: 1.125em;
   line-height: 150%;
+  font-weight: bold;
 }
 .botao{
   color: #1C1C1C;

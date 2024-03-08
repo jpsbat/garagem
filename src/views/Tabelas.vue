@@ -172,6 +172,7 @@ margin-top: 5rem;
   text-align: center;
   font-size: 1.125em;
   line-height: 150%;
+  font-weight: bold;
 }
 @media only screen and (max-width: 1300px) {
 .conteudo-principal {
