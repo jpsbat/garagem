@@ -58,7 +58,7 @@
       <span class="subtitulo-lg cadastre">
         Alterar/excluir carros
       </span>
-      <table>
+      <table v-if="carros.length">
         <thead>
           <tr>
             <th>ID</th>
@@ -70,25 +70,29 @@
             <th>Excluir</th>
           </tr>
         </thead>
-    <tbody>
-      <tr
-        v-for="carro in carros"
-        :key="carro.id"
-      >
-        <td>{{ carro.id }}</td>
-        <td>{{ carro.modelo }}</td>
-        <td>{{ carro.placa }}</td>
-        <td>{{ carro.revisao }}</td>
-        <td>{{ carro.nome }}</td>
-        <td>
-          <b-button class="botao" @click="atualizarCarro(carro.id)">Alterar</b-button>
-        </td>
-        <td>
-          <b-button class="botao" @click="confirmarExclusaoCarro(carro.id, carro.modelo)">Excluir</b-button>
-        </td>
-      </tr>
-    </tbody>
-    </table>
+        <tbody>
+          <tr
+            v-for="carro in carros"
+            :key="carro.id"
+          >
+            <td>{{ carro.id }}</td>
+            <td>{{ carro.modelo }}</td>
+            <td>{{ carro.placa }}</td>
+            <td>{{ carro.revisao }}</td>
+            <td>{{ carro.nome }}</td>
+            <td>
+              <b-button class="botao" @click="atualizarCarro(carro.id)">Alterar</b-button>
+            </td>
+            <td>
+              <b-button class="botao" @click="confirmarExclusaoCarro(carro.id, carro.modelo)">Excluir</b-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p v-else class="lista-vazia">
+          :( Não há carros registrados!
+      </p>
 
     <b-alert
       :show="dismissCountDown"
@@ -284,6 +288,17 @@ justify-content: space-evenly;
 }
 .itens{
   margin-bottom: 1rem;
+}
+.lista-vazia {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  color: black;
+  text-align: center;
+  font-size: 1.125em;
+  line-height: 150%;
 }
 .botao{
 color: #1C1C1C;

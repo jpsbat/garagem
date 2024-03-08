@@ -1,14 +1,11 @@
 <template>
   <main class="conteudo-principal">
     <section>
-        <span class="subtitulo-lg cadastre">
-            Cadastre o carro:
-        </span>
         <div>
           <span class="subtitulo-lg cadastre">
             Clientes registrados:
           </span>
-          <table>
+          <table v-if="carros.length">
             <thead>
               <tr>
                 <th>ID</th>
@@ -31,6 +28,9 @@
             </tr>
           </tbody>
         </table>
+        <p v-else class="lista-vazia">
+        :( Não há clientes registrados!
+        </p>
         </div>
     </section>
   </main>
@@ -119,11 +119,7 @@ export default {
                   this.listar()
                 })
                 .catch(error => console.log(error))
-            } else {
-              console.log('Você cancelou a operação.')
             }
-          } else {
-            console.log('Você cancelou a operação.')
           }
         })
         .catch(error => console.log(error))
@@ -164,7 +160,18 @@ color: #04a5c4;
 display: block;
 text-align: center;
 margin-bottom: 1.5rem;
-margin-top: 1.5rem;
+margin-top: 5rem;
+}
+.lista-vazia {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  color: black;
+  text-align: center;
+  font-size: 1.125em;
+  line-height: 150%;
 }
 @media only screen and (max-width: 1300px) {
 .conteudo-principal {

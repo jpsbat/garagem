@@ -27,7 +27,7 @@
         Alterar/excluir clientes
       </span>
       <div>
-        <table>
+        <table v-if="clientes.length">
           <thead>
             <tr>
               <th>ID</th>
@@ -52,6 +52,9 @@
             </tr>
           </tbody>
         </table>
+        <p v-else class="lista-vazia">
+        :( Não há clientes registrados!
+        </p>
       </div>
     </section>
 
@@ -201,6 +204,17 @@ input, select {
 }
 .itens{
   margin-bottom: 1rem;
+}
+.lista-vazia {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  color: black;
+  text-align: center;
+  font-size: 1.125em;
+  line-height: 150%;
 }
 .botao{
   color: #1C1C1C;
