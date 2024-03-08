@@ -215,11 +215,7 @@ export default {
                   this.listar()
                 })
                 .catch(error => console.log(error))
-            } else {
-              console.log('Você cancelou a operação.')
             }
-          } else {
-            console.log('Você cancelou a operação.')
           }
         })
         .catch(error => console.log(error))

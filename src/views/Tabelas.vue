@@ -3,16 +3,16 @@
     <section>
         <div>
           <span class="subtitulo-lg cadastre">
-            Clientes registrados:
+            Clientes com carros registrados:
           </span>
           <table v-if="carros.length">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Marca e modelo</th>
+                <th>Proprietário</th>
+                <th>Carro</th>
                 <th>Placa</th>
                 <th>Data de revisão</th>
-                <th>Proprietário</th>
               </tr>
             </thead>
           <tbody>
@@ -21,10 +21,10 @@
               :key="carro.id"
             >
               <td>{{ carro.id }}</td>
+              <td>{{ carro.nome }}</td>
               <td>{{ carro.modelo }}</td>
               <td>{{ carro.placa }}</td>
               <td>{{ carro.revisao }}</td>
-              <td>{{ carro.nome }}</td>
             </tr>
           </tbody>
         </table>
@@ -56,22 +56,6 @@ export default {
     this.listar()
   },
   methods: {
-    cadastrarCarro (e) {
-      e.preventDefault()
-
-      axios
-        .post('http://localhost:3000/routes/carros/cadastrar', {
-          modelo: this.modelo,
-          placa: this.placa,
-          revisao: this.revisao,
-          id_cliente: this.nome
-        })
-        .then(response => {
-          console.log(response)
-          this.listar()
-        })
-        .catch(error => console.log(error))
-    },
     preencherSelect () {
       axios
         .get('http://localhost:3000/routes/clientes/listar')
@@ -88,58 +72,6 @@ export default {
           this.carros = response.data.data
         })
         .catch(error => console.log(error))
-    },
-    atualizarCarro (id) {
-      axios
-        .get(`http://localhost:3000/routes/carros/${id}`)
-        .then(response => {
-          // eslint-disable-next-line camelcase
-          var id_cliente = window.prompt('ID do cliente:', response.data.data.id_cliente)
-
-          // eslint-disable-next-line camelcase
-          if (id_cliente !== null) {
-            // eslint-disable-next-line camelcase
-            var modelo_carro = window.prompt('Nome do carro:', response.data.data.modelo)
-            // eslint-disable-next-line camelcase
-            var placa_carro = window.prompt('Placa do carro:', response.data.data.placa)
-            // eslint-disable-next-line camelcase
-            var revisao_carro = window.prompt('Data de revisão:', response.data.data.revisao)
-
-            // eslint-disable-next-line camelcase
-            if (modelo_carro !== null) {
-              axios
-                .patch(`http://localhost:3000/routes/carros/alterar/${id}`, {
-                  id_cliente: id_cliente,
-                  modelo: modelo_carro,
-                  placa: placa_carro,
-                  revisao: revisao_carro
-                })
-                .then(response => {
-                  console.log(response)
-                  this.listar()
-                })
-                .catch(error => console.log(error))
-            }
-          }
-        })
-        .catch(error => console.log(error))
-    },
-    excluirCarro (id) {
-      console.log(id)
-
-      var result = window.confirm('Você tem certeza que deseja excluir este carro?')
-
-      if (result) {
-        axios
-          .delete(`http://localhost:3000/routes/carros/excluir/${id}`)
-          .then(response => {
-            console.log(response)
-            this.listar()
-          })
-          .catch(error => console.log(error))
-      } else {
-        window.alert('O usuário cancelou a exclusão.')
-      }
     }
   }
 }
