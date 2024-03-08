@@ -1,77 +1,110 @@
 <template>
   <main class="conteudo-principal">
-      <section>
-          <span class="subtitulo-lg cadastre">
-              Cadastre o cliente:
-          </span>
-          <div class="componente-form-table">
-    <form action="">
-    <label for="btn-cadastrar" class="itens">Nome: </label>
-    <input
-      autocomplete="off" required
-      type="text"
-      id="btn-cadastrar"
-      name="btn-cadastrar"
-      v-model="nome"
-      >
-    <b-button
-      class="cadastrar"
-      type="submit"
-      value="Cadastrar"
-      @click="cadastrarCliente($event)"
-    >Cadastrar</b-button>
-    </form>
-  </div>
+    <section>
+      <span class="subtitulo-lg cadastre">
+        Cadastre o cliente:
+      </span>
+      <div class="componente-form-table">
+        <form action="">
+          <label for="btn-cadastrar" class="itens">Nome: </label>
+          <input
+            autocomplete="off" required
+            type="text"
+            id="btn-cadastrar"
+            name="btn-cadastrar"
+            v-model="nome"
+          >
+          <b-button
+            class="cadastrar"
+            type="submit"
+            value="Cadastrar"
+            @click="cadastrarCliente($event)"
+          >Cadastrar</b-button>
+        </form>
+      </div>
 
-  <span class="subtitulo-lg cadastre">
-    Alterar/excluir clientes
-  </span>
-  <div>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nome</th>
-          <th>Alterar</th>
-          <th>Excluir</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="cliente in clientes"
-          :key="cliente.id"
-        >
-          <td>{{ cliente.ID }}</td>
-          <td>{{ cliente.NOME }}</td>
-          <td>
-              <b-button class="botao" @click="atualizarCliente(cliente.ID)">Alterar</b-button>
-          </td>
-          <td>
-            <b-button class="botao" @click="excluirCliente(cliente.ID)">Excluir</b-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <span class="subtitulo-lg cadastre">
+        Alterar/excluir clientes
+      </span>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Alterar</th>
+              <th>Excluir</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="cliente in clientes"
+              :key="cliente.id"
+            >
+              <td>{{ cliente.ID }}</td>
+              <td>{{ cliente.NOME }}</td>
+              <td>
+                <b-button class="botao" @click="atualizarCliente(cliente.ID)">Alterar</b-button>
+              </td>
+              <td>
+                <b-button class="botao" @click="confirmarExclusaoCliente(cliente.ID, cliente.NOME)">Excluir</b-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
+
+    <b-alert
+      :show="dismissCountDown"
+      variant="primary"
+      @dismissed="dismissCountDown = 0"
+      @dismiss-count-down="countDownChanged"
+      >Cliente excluído!
+      <b-progress
+        variant="primary"
+        :max="dismissSecs"
+        :value="dismissCountDown"
+        height="4px"
+      ></b-progress>
+    </b-alert>
+    <b-modal v-model="showModal" @ok="excluirCliente(idCliente)" hide-header>
+      <h5>
+        Tem certeza que deseja excluir {{ nomeCliente }}?
+      </h5>
+    </b-modal>
+
   </main>
 </template>
 
 <script>
 import axios from 'axios'
+import { BButton, BModal } from 'bootstrap-vue'
 
 export default {
   name: 'ClientesForm',
+  components: {
+    BButton,
+    BModal
+  },
   data () {
     return {
       nome: '',
-      clientes: []
+      clientes: [],
+      showModal: false,
+      idCliente: null,
+      nomeCliente: '',
+      dismissCountDown: 0,
+      dismissSecs: 3
     }
   },
   mounted () {
     this.listar()
   },
   methods: {
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
     cadastrarCliente (e) {
       e.preventDefault()
 
@@ -82,7 +115,7 @@ export default {
         .then(response => {
           console.log(response)
           this.listar()
-          alert('Cliente cadastrado com sucesso!')
+          this.$swal('Sucesso!', 'O cliente foi cadastrado no sistema.', 'success')
         })
         .catch(error => console.log(error))
     },
@@ -106,33 +139,32 @@ export default {
             axios
               .patch(`http://localhost:3000/routes/clientes/alterar/${id}`, {
                 nome: nome_cliente
-
               })
               .then(response => {
                 console.log(response)
                 this.listar()
               })
               .catch(error => console.log(error))
-          } else {
-            console.log('Você cancelou a operação.')
           }
         })
         .catch(error => console.log(error))
     },
+    confirmarExclusaoCliente (id, nome) {
+      this.idCliente = id
+      this.nomeCliente = nome
+      this.showModal = true
+    },
     excluirCliente (id) {
-      var result = window.confirm('Você tem certeza que deseja excluir este cliente?')
+      axios
+        .delete(`http://localhost:3000/routes/clientes/excluir/${id}`)
+        .then(response => {
+          console.log(response)
+          this.listar()
+          this.dismissCountDown = this.dismissSecs
+        })
+        .catch(error => console.log(error))
 
-      if (result) {
-        axios
-          .delete(`http://localhost:3000/routes/clientes/excluir/${id}`)
-          .then(response => {
-            console.log(response)
-            this.listar()
-          })
-          .catch(error => console.log(error))
-      } else {
-        window.alert('O usuário cancelou a exclusão.')
-      }
+      this.showModal = false
     }
   }
 }
@@ -140,39 +172,39 @@ export default {
 
 <style scoped>
 .conteudo-principal {
-padding-bottom: 7.5rem;
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 5rem;
+  padding-bottom: 7.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5rem;
 }
 .cadastre {
-color: #04a5c4;
-display: block;
-text-align: center;
-margin-bottom: 1.5rem;
-margin-top: 5rem;
+  color: #04a5c4;
+  display: block;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  margin-top: 5rem;
 }
 input, select {
-margin-left: .5rem;
-color: black;
-font-size: 15px;
-width: 100%;
-padding: 10px 5px 5px;
-border-radius: 5px;
-border-width: 3px;
+  margin-left: .5rem;
+  color: black;
+  font-size: 15px;
+  width: 100%;
+  padding: 10px 5px 5px;
+  border-radius: 5px;
+  border-width: 3px;
 }
 .componente-form-table {
-width: 100%;
-display: flex;
-justify-content: space-evenly;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
 }
 .itens{
   margin-bottom: 1rem;
 }
 .botao{
-color: #1C1C1C;
-background-color: #04a5c4;
+  color: #1C1C1C;
+  background-color: #04a5c4;
 }
 .cadastrar{
   color: #1C1C1C;

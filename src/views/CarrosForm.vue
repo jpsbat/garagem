@@ -84,11 +84,31 @@
           <b-button class="botao" @click="atualizarCarro(carro.id)">Alterar</b-button>
         </td>
         <td>
-          <b-button class="botao" @click="excluirCarro(carro.id)">Excluir</b-button>
+          <b-button class="botao" @click="confirmarExclusaoCarro(carro.id, carro.modelo)">Excluir</b-button>
         </td>
       </tr>
     </tbody>
     </table>
+
+    <b-alert
+      :show="dismissCountDown"
+      variant="primary"
+      @dismissed="dismissCountDown = 0"
+      @dismiss-count-down="countDownChanged"
+      >Veículo excluído!
+      <b-progress
+        variant="primary"
+        :max="dismissSecs"
+        :value="dismissCountDown"
+        height="4px"
+      ></b-progress>
+    </b-alert>
+
+    <b-modal v-model="showModal" @ok="excluirCarro(idCarro)" hide-header>
+      <h5>
+        Tem certeza que deseja excluir {{ modeloCarro }}?
+      </h5>
+    </b-modal>
     </div>
   </section>
   </main>
@@ -96,9 +116,14 @@
 
 <script>
 import axios from 'axios'
+import { BButton, BModal } from 'bootstrap-vue'
 
 export default {
   name: 'CarrosForm',
+  components: {
+    BButton,
+    BModal
+  },
   data () {
     return {
       modelo: '',
@@ -106,7 +131,12 @@ export default {
       revisao: '',
       cliente: '',
       clientes_disponiveis: [],
-      carros: []
+      carros: [],
+      showModal: false,
+      idCarro: null,
+      modeloCarro: '',
+      dismissCountDown: 0,
+      dismissSecs: 3
     }
   },
   mounted () {
@@ -114,6 +144,9 @@ export default {
     this.listar()
   },
   methods: {
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
     cadastrarCarro (e) {
       e.preventDefault()
 
@@ -127,7 +160,7 @@ export default {
         .then(response => {
           console.log(response)
           this.listar()
-          alert('Veículo cadastrado com sucesso!')
+          this.$swal('Sucesso!', 'O veículo foi cadastrado no sistema.', 'success')
         })
         .catch(error => console.log(error))
     },
@@ -187,22 +220,20 @@ export default {
         })
         .catch(error => console.log(error))
     },
+    confirmarExclusaoCarro (id, modelo) {
+      this.idCarro = id
+      this.modeloCarro = modelo
+      this.showModal = true
+    },
     excluirCarro (id) {
-      console.log(id)
-
-      var result = window.confirm('Você tem certeza que deseja excluir este carro?')
-
-      if (result) {
-        axios
-          .delete(`http://localhost:3000/routes/carros/excluir/${id}`)
-          .then(response => {
-            console.log(response)
-            this.listar()
-          })
-          .catch(error => console.log(error))
-      } else {
-        window.alert('O usuário cancelou a exclusão.')
-      }
+      axios
+        .delete(`http://localhost:3000/routes/carros/excluir/${id}`)
+        .then(response => {
+          console.log(response)
+          this.listar()
+          this.dismissCountDown = this.dismissSecs
+        })
+        .catch(error => console.log(error))
     }
   }
 }

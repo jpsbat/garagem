@@ -11,7 +11,7 @@
 
         <b-navbar-nav>
           <b-nav-form>
-            <b-nav-form-title class="titulo">Garagem API</b-nav-form-title>
+            <router-link :to="{ path: '/' }" class="titulo" style="text-decoration: none;">Garagem API</router-link>
           </b-nav-form>
         </b-navbar-nav>
       </b-collapse>
@@ -38,5 +38,8 @@ export default {
     top: 0;
     width: 100%;
     z-index: 1000;
+  }
+  .home {
+    background-color: 'dark';
   }
 </style>
