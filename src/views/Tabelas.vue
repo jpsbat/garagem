@@ -29,7 +29,7 @@
           </tbody>
         </table>
         <p v-else class="lista-vazia">
-        :( Não há clientes registrados!
+        :( Não há clientes com carros registrados!
         </p>
         </div>
     </section>
